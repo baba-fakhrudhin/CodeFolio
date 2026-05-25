@@ -1,43 +1,33 @@
 import express from "express";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
-import cookieParser from "cookie-parser";
-import mongoose from "mongoose";
+
+import authRoutes from "./routes/authRoutes.js";
+
 
 dotenv.config();
 
 const app = express();
 
-// Middleware
+app.use(cors());
 app.use(express.json());
 
-app.use(cookieParser());
+app.use("/api/auth", authRoutes);
 
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true,
-  })
-);
-
-// Test Route
-app.get("/api/test", (req, res) => {
-  res.json({
-    message: "Server working",
-  });
-});
-
-// MongoDB Connection
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("MongoDB Connected");
   })
-  .catch((error) => {
-    console.log("MongoDB Error:", error);
+  .catch((err) => {
+    console.log(err);
   });
 
-// Server Start
+app.get("/", (req, res) => {
+  res.send("API Running");
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

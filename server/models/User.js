@@ -1,93 +1,39 @@
 import mongoose from "mongoose";
 
-// Project Schema
-const projectSchema = new mongoose.Schema({
-  title: {
-    type: String,
-  },
+// ================= PROJECT SCHEMA =================
 
-  description: {
-    type: String,
-  },
-
-  techStack: [String],
-
-  repoLink: {
-    type: String,
-  },
-
-  liveLink: {
-    type: String,
-  },
-
-  screenshot: {
-    type: String,
-  },
-});
-
-// Main User Schema
-const userSchema = new mongoose.Schema(
+const projectSchema = new mongoose.Schema(
   {
-    username: {
+    title: {
       type: String,
-      required: true,
-      unique: true,
       trim: true,
+      default: "",
     },
 
-    email: {
+    description: {
       type: String,
-      required: true,
-      unique: true,
       trim: true,
+      default: "",
     },
 
-    password: {
+    techStack: {
+      type: [String],
+      default: [],
+    },
+
+    repoLink: {
       type: String,
-      required: true,
+      default: "",
     },
 
-    templateId: {
+    liveLink: {
       type: String,
-      default: "minimal",
+      default: "",
     },
 
-    profile: {
-      name: {
-        type: String,
-      },
-
-      bio: {
-        type: String,
-      },
-
-      avatar: {
-        type: String,
-      },
-
-      resumeUrl: {
-        type: String,
-      },
-
-      socialLinks: {
-        github: String,
-        linkedin: String,
-        twitter: String,
-        website: String,
-      },
-    },
-
-    skills: {
-      frontend: [String],
-      backend: [String],
-      devops: [String],
-    },
-
-    projects: [projectSchema],
-
-    isPro: {
-      type: Boolean,
-      default: false,
+    screenshot: {
+      type: String,
+      default: "",
     },
   },
   {
@@ -95,7 +41,125 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// Export Model
+// ================= USER SCHEMA =================
+
+const userSchema = new mongoose.Schema(
+  {
+    // AUTH
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      minlength: 3,
+      maxlength: 30,
+    },
+
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+
+    password: {
+      type: String,
+      required: true,
+      minlength: 6,
+    },
+
+    // TEMPLATE
+    templateId: {
+      type: String,
+      default: "minimal",
+    },
+
+    // PROFILE
+    profile: {
+      name: {
+        type: String,
+        trim: true,
+        default: "",
+      },
+
+      bio: {
+        type: String,
+        trim: true,
+        default: "",
+      },
+
+      avatar: {
+        type: String,
+        default: "",
+      },
+
+      resumeUrl: {
+        type: String,
+        default: "",
+      },
+
+      socialLinks: {
+        github: {
+          type: String,
+          default: "",
+        },
+
+        linkedin: {
+          type: String,
+          default: "",
+        },
+
+        twitter: {
+          type: String,
+          default: "",
+        },
+
+        website: {
+          type: String,
+          default: "",
+        },
+      },
+    },
+
+    // SKILLS
+    skills: {
+      frontend: {
+        type: [String],
+        default: [],
+      },
+
+      backend: {
+        type: [String],
+        default: [],
+      },
+
+      devops: {
+        type: [String],
+        default: [],
+      },
+    },
+
+    // PROJECTS
+    projects: {
+      type: [projectSchema],
+      default: [],
+    },
+
+    // PREMIUM
+   plan: {
+  type: String,
+  enum: ["free", "pro"],
+  default: "free",
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+// ================= EXPORT MODEL =================
+
 const User = mongoose.model("User", userSchema);
 
 export default User;
