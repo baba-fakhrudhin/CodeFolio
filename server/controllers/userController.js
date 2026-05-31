@@ -34,18 +34,20 @@ export const getCurrentUser = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const {
-      name,
-      bio,
-      avatar,
-      resumeUrl,
-      github,
-      linkedin,
-      twitter,
-      website,
-      templateId,
-    } = req.body;
-
+        const {
+          name,
+          bio,
+          tagline,
+          location,
+          phone,
+          avatar,
+          resumeUrl,
+          github,
+          linkedin,
+          twitter,
+          website,
+          templateId,
+        } = req.body;
     // Update user profile
     const updatedUser = await User.findByIdAndUpdate(
       req.userId,
@@ -53,6 +55,9 @@ export const updateProfile = async (req, res) => {
         profile: {
           name,
           bio,
+          tagline,
+          location,
+          phone,
           avatar,
           resumeUrl,
 
@@ -67,7 +72,7 @@ export const updateProfile = async (req, res) => {
         templateId,
       },
       {
-        new: true,
+        returnDocument: "after",
       }
     ).select("-password");
 
@@ -80,6 +85,70 @@ export const updateProfile = async (req, res) => {
     });
   } catch (error) {
     console.log("Update Profile Error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+// ================= GET SKILLS =================
+
+export const getSkills = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).select("skills");
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+
+      skills: user.skills,
+    });
+  } catch (error) {
+    console.log("Get Skills Error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+// ================= UPDATE SKILLS =================
+
+export const updateSkills = async (req, res) => {
+  try {
+    const { frontend, backend, devops } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.userId,
+      {
+        skills: {
+          frontend,
+          backend,
+          devops,
+        },
+      },
+      {
+         returnDocument: "after",
+      }
+    ).select("skills");
+
+    res.status(200).json({
+      success: true,
+      message: "Skills updated successfully",
+
+      skills: updatedUser.skills,
+    });
+  } catch (error) {
+    console.log("Update Skills Error:", error);
 
     res.status(500).json({
       success: false,

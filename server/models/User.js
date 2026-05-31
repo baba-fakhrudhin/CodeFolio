@@ -41,6 +41,112 @@ const projectSchema = new mongoose.Schema(
   }
 );
 
+// Experience Schema
+const experienceSchema = new mongoose.Schema({
+  company: {
+    type: String,
+  },
+
+  role: {
+    type: String,
+  },
+
+  startDate: {
+    type: String,
+  },
+
+  endDate: {
+    type: String,
+  },
+
+  description: {
+    type: String,
+  },
+
+  skillsUsed: [String],
+});
+
+
+// Education Schema
+const educationSchema = new mongoose.Schema({
+  institution: {
+    type: String,
+  },
+
+  degree: {
+    type: String,
+  },
+
+  startYear: {
+    type: String,
+  },
+
+  endYear: {
+    type: String,
+  },
+});
+
+
+// Languages Schema
+const languageSchema = new mongoose.Schema({
+  name: {
+    type: String,
+  },
+
+  proficiency: {
+    type: String,
+  },
+});
+
+// Certification Schema
+const certificationSchema = new mongoose.Schema({
+  title: {
+    type: String,
+  },
+
+  issuer: {
+    type: String,
+  },
+
+  issueDate: {
+    type: String,
+  },
+
+  credentialUrl: {
+    type: String,
+  },
+});
+
+// Achievement Schema
+const achievementSchema = new mongoose.Schema({
+  title: {
+    type: String,
+  },
+
+  description: {
+    type: String,
+  },
+});
+
+
+// Publication Schema
+const publicationSchema = new mongoose.Schema({
+  title: {
+    type: String,
+  },
+
+  description: {
+    type: String,
+  },
+
+  link: {
+    type: String,
+  },
+});
+
+
+
+
 // ================= USER SCHEMA =================
 
 const userSchema = new mongoose.Schema(
@@ -98,6 +204,17 @@ const userSchema = new mongoose.Schema(
         type: String,
         default: "",
       },
+      tagline: {
+        type: String,
+      },
+
+      location: {
+        type: String,
+      },
+
+      phone: {
+        type: String,
+      },
 
       socialLinks: {
         github: {
@@ -120,6 +237,7 @@ const userSchema = new mongoose.Schema(
           default: "",
         },
       },
+      
     },
 
     // SKILLS
@@ -145,6 +263,45 @@ const userSchema = new mongoose.Schema(
       type: [projectSchema],
       default: [],
     },
+
+
+
+    // EXPERIENCE
+    experience: {
+      type: [experienceSchema],
+      default: [],
+    },
+
+    // EDUCATION
+    education: {
+      type: [educationSchema],
+      default: [],
+    },
+
+    // LANGUAGES
+    languages: {
+      type: [languageSchema],
+      default: [],
+    },
+
+    // CERTIFICATIONS
+    certifications: {
+      type: [certificationSchema],
+      default: [],
+    },
+
+    // PUBLICATIONS
+    publications: {
+      type: [publicationSchema],
+      default: [],
+    },
+
+    // ACHIEVEMENTS
+    achievements: {
+      type: [achievementSchema],
+      default: [],
+    },
+
 
     // PREMIUM
    plan: {
